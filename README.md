@@ -201,3 +201,4 @@ Every endpoint uses the existing `protect` middleware, and `allowRoles` restrict
 ## Endpoint: POST /api/schedules
 ## Endpoint: GET /api/schedules/my-schedules
 ## Endpoint: PUT /api/schedules/admin/:id/status
+## Endpoint: POST /api/schedules/admin/generate-pickups
