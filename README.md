@@ -171,3 +171,30 @@ The React frontend uses Axios service files. After login, the JWT is stored in `
 ## Repository Notes
 
 This folder is its own Git repository. `node_modules/`, `.env`, generated logs, and uploaded photos are ignored. The empty upload folders are kept with `.gitkeep` files so students can see where images are stored.
+
+## New Feature: Recurring Pickup Schedules
+
+This extension adds customer-controlled recurring pickup schedules and an admin approval workflow. Customers set a weekly schedule, admins approve or reject it, and approved schedules can be turned into real pickup requests on the matching day.
+
+### New Database Table
+
+- `pickup_schedules` — stores each customer's recurring schedule (day of week, location, waste type, bin level, status, and admin review fields).
+- Run `database/migrate_schedules.sql` to add it to an existing database, or `npm run db:setup` to rebuild everything from `database/schema.sql`.
+
+### New API Endpoints
+
+Customer:
+
+- `POST /api/schedules` — create a schedule (own locations only)
+- `GET  /api/schedules/my-schedules` — list the logged-in customer's schedules
+- `DELETE /api/schedules/:id` — cancel a pending schedule the customer owns
+
+Admin:
+
+- `GET  /api/schedules/admin/list?status=pending|approved|rejected` — filter schedules by status
+- `PUT  /api/schedules/admin/:id/status` — approve or reject a schedule (`{ "status": "approved", "admin_note": "" }`)
+- `POST /api/schedules/admin/generate-pickups` — create pickup requests for all approved schedules whose `day_of_week` matches today; duplicates for the same customer/location/waste on the same date are skipped
+
+### Access Control
+
+Every endpoint uses the existing `protect` middleware, and `allowRoles` restricts each route to the correct role. Customers can only act on their own locations and schedules; admin endpoints return `403` for non-admins.
