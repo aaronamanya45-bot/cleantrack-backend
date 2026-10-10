@@ -197,4 +197,4 @@ Admin:
 
 ### Access Control
 
-Every endpoint uses the existing `protect` middleware, and `allowRoles` restricts each route to the correct role. Customers can only act on their own locations and schedules; admin endpoints return `403` for non-admins.
+Every endpoint uses the existing `protect` middleware, and `allowRoles` restricts each route to the correct role. Customers can only act on their own locations and schedules; admin endpoints return `403` for non-admins.# CleanTrack Backend — Learning Notes
